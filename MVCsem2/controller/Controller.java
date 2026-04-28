@@ -8,6 +8,11 @@ import MVCsem2.model.device.Printer;
 import MVCsem2.model.entity.Customer;
 import MVCsem2.model.entity.RepairOrder;
 
+
+/**
+ * Handles interaction between the view and the rest of the system.
+ */
+
 public class Controller {
 
 
@@ -16,6 +21,13 @@ public class Controller {
 	private CustomerRegistry customerRegistry;
 
 	private RepairOrderRegistry repairOrderRegistry;
+
+	/**
+	* Creates a controller with the specified printers and registers
+	* @param customerRegistry The customer registry.
+	* @param repairOrderRegistry The repair order registry.
+	* @param printer The printer.
+	*/
 
 	public Controller(CustomerRegistry customerRegistry, RepairOrderRegistry repairOrderRegistry, Printer printer) {
     this.customerRegistry = customerRegistry;
@@ -47,8 +59,8 @@ public class Controller {
 	 * @param customerPhone The customers phone number.
 	 * @param bikeSerialNo The bike serial number.
 	 */
-	public void createRepairOrder(String problemDescr, String customerPhone, String bikerSerialNo) {
-		repairOrderRegistry.createRepairOrder(problemDescr, customerPhone, bikerSerialNo);
+	public void createRepairOrder(String problemDescr, String customerPhone, String bikeSerialNo) {
+		repairOrderRegistry.createRepairOrder(problemDescr, customerPhone, bikeSerialNo);
 	}
 
 	/**

@@ -76,7 +76,7 @@ public class View {
 		RepairOrderDTO repairOrder = controller.findRepairOrder(phoneNumberForRepairOrder);
 
 		if (repairOrder != null) {
-			System.out.println("Repair order found before chaneg:");
+			System.out.println("Repair order found before change:");
 			System.out.println("Repair order id: " + repairOrder.getId());
 			System.out.println("Status: " + repairOrder.getStatus());
 			System.out.println("Total cost: " + repairOrder.getTotalCost());
