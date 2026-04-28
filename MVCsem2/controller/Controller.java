@@ -41,7 +41,12 @@ public class Controller {
 	return new CustomerDetailsDTO(customer);
 	}
 
-
+	/**
+	 * Creates a new repair order using the provided input data
+	 * @param problemDescr The problem description.
+	 * @param customerPhone The customers phone number.
+	 * @param bikeSerialNo The bike serial number.
+	 */
 	public void createRepairOrder(String problemDescr, String customerPhone, String bikerSerialNo) {
 		repairOrderRegistry.createRepairOrder(problemDescr, customerPhone, bikerSerialNo);
 	}

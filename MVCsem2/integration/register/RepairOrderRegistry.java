@@ -79,7 +79,7 @@ public class RepairOrderRegistry {
 
     /**
      * Finds 1 repair order.
-     * @param repairOrderId The customer phones number.
+     * @param phoneNumber The customer phones number.
      * @return The matching repair order.
      */
     public RepairOrder findRepairOrder(String phoneNumber) {

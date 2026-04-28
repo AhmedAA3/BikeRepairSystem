@@ -40,6 +40,9 @@ public class RepairOrderDTO {
     return repairOrderDTOs;
     }
 
+    /**
+    * Returns the repair order id.
+    */
     public String getId() { return id; }
 
     /**
