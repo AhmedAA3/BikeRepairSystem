@@ -15,9 +15,11 @@ public class CustomerRegistry {
     public CustomerRegistry() {
         customers = new Customer[] {
             new Customer("Ahmed Adam", "ahmed@mail.com", "0701234567",
-                    new Bike("Abdurraham", "Reaction Hybrid", "CUBE123")),
-            new Customer("Sara Svensson", "sara@mail.com", "0737654321",
-                    new Bike("Trek", "Powerfly 5", "TREK456"))
+                    new Bike("bmx", "Reaction Hybrid", "CUBE123")),
+            new Customer("Cristiano Ronaldo", "CR7@mail.com", "0737654321",
+                    new Bike("Scotter", " 1", "SET401")),
+            new Customer("Lionel Messi", "LM10@mail.com", "0761112233",
+                    new Bike("E-bike", " 1", "LOE230"))
         };
     }
 

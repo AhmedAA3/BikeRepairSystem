@@ -13,7 +13,7 @@ public class RepairOrderRegistry {
      */
     public RepairOrderRegistry() {
         repairOrders = new RepairOrder[] {
-            new RepairOrder("RO1", "Battery does not charge", "0701234567", "BIKE100"),
+            new RepairOrder("RO1", "", "0701234567", "BIKE100"),
             new RepairOrder("RO2", "Brakes need adjustment", "0737654321", "BIKE200"),
             new RepairOrder("RO3", "Motor makes strange noise", "0761112233", "BIKE300")
         };
@@ -33,6 +33,7 @@ public class RepairOrderRegistry {
         }
         return null;
     }
+    
 
     /**
      * Returns all stored repair orders.
@@ -78,11 +79,15 @@ public class RepairOrderRegistry {
 
     /**
      * Finds 1 repair order.
-     *
-     * @param repairOrderId The repair order id.
+     * @param repairOrderId The customer phones number.
      * @return The matching repair order.
      */
-    public RepairOrder findRepairOrder(String repairOrderId) {
-        return getRepairOrder(repairOrderId);
+    public RepairOrder findRepairOrder(String phoneNumber) {
+        for (int i = repairOrders.length - 1; i >= 0; i--) {
+            if (repairOrders[i].getCustomerPhone().equals(phoneNumber)) {
+            return repairOrders[i];
+        }
     }
+    return null;
+}
 }

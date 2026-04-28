@@ -20,7 +20,22 @@ public class CustomerDetailsDTO {
         this.phone = customer.getPhoneNumber();
     }
 
+
+    /**
+     * Returns the customers name.
+     */
     public String getName() { return name; }
+
+
+    /**
+     * Returns the customers email.
+     */
     public String getEmail() { return email; }
+
+
+
+    /**
+     * Returns the customers phone number.
+     */
     public String getPhone() { return phone; }
 }
