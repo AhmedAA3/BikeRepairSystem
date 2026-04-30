@@ -15,130 +15,151 @@ public class ControllerTest {
 
     @BeforeEach
     public void setUp() {
-        CustomerRegistry customerRegistry = new CustomerRegistry();
-        RepairOrderRegistry repairOrderRegistry = new RepairOrderRegistry();
+        CustomerRegistry customers = new CustomerRegistry();
+        RepairOrderRegistry repairOrders = new RepairOrderRegistry();
         Printer printer = new Printer();
 
-        controller = new Controller(customerRegistry, repairOrderRegistry, printer);
+        controller = new Controller(customers, repairOrders, printer);
     }
 
     @Test
-    public void testFindCristianoRonaldoCustomer() {
-        CustomerDetailsDTO result = controller.findCustomer("0737654321");
+    public void controllerShouldFindCristianoRonaldoByPhoneNumber() {
+        String cristianoPhone = "0737654321";
 
-        assertNotNull(result, "Cristiano Ronaldo should be found.");
-        assertEquals("Cristiano Ronaldo", result.getName(),
-                "Wrong customer name was returned.");
-        assertEquals("CR7@mail.com", result.getEmail(),
-                "Wrong customer email was returned.");
-        assertEquals("0737654321", result.getPhone(),
-                "Wrong customer phone was returned.");
+        CustomerDetailsDTO customerDetails = controller.findCustomer(cristianoPhone);
+
+        assertNotNull(customerDetails,
+                "Cristiano Ronaldo should be found by his registered phone number.");
+        assertEquals("Cristiano Ronaldo", customerDetails.getName(),
+                "The controller should return the correct customer name.");
+        assertEquals("CR7@mail.com", customerDetails.getEmail(),
+                "The controller should return the correct customer email.");
+        assertEquals(cristianoPhone, customerDetails.getPhone(),
+                "The controller should return the same phone number that was searched for.");
     }
 
     @Test
-    public void testFindCustomerThatDoesNotExist() {
-        CustomerDetailsDTO result = controller.findCustomer("0000000000");
+    public void controllerShouldReturnNullForUnknownCustomerPhone() {
+        CustomerDetailsDTO customerDetails = controller.findCustomer("0000000000");
 
-        assertNull(result, "A customer that does not exist should return null.");
+        assertNull(customerDetails,
+                "An unknown customer phone number should not return customer details.");
     }
 
     @Test
-    public void testCreateRepairOrderFromViewScenario() {
-        controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
+    public void cristianoShouldHaveExistingRO2BeforeNewScenarioOrderIsCreated() {
+        String cristianoPhone = "0737654321";
 
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO4");
+        RepairOrderDTO existingOrder = controller.findRepairOrder(cristianoPhone);
 
-        assertNotNull(result, "The created repair order RO4 should exist.");
-        assertEquals("RO4", result.getId(),
-                "The created repair order should have id RO4.");
-        assertEquals("Pending", result.getStatus(),
-                "A new repair order should have status Pending.");
-        assertEquals(0, result.getTotalCost(),
-                "A new repair order should have total cost 0.");
+        assertNotNull(existingOrder,
+                "Cristiano Ronaldo should already have a hardcoded repair order.");
+        assertEquals("RO2", existingOrder.getId(),
+                "The existing hardcoded repair order for Cristiano Ronaldo should be RO2.");
+        assertEquals("Pending", existingOrder.getStatus(),
+                "The hardcoded repair order should start as pending.");
     }
 
     @Test
-    public void testFindRepairOrderForCristianoBeforeCreatingNewOrder() {
-        RepairOrderDTO result = controller.findRepairOrder("0737654321");
+    public void creatingScenarioOrderShouldCreatePendingRO4() {
+        String problem = "Wheel is broken";
+        String cristianoPhone = "0737654321";
+        String bikeSerialNo = "RJL403";
 
-        assertNotNull(result, "Cristiano Ronaldo should have an existing repair order.");
-        assertEquals("RO2", result.getId(),
-                "Cristiano Ronaldo's existing repair order should be RO2.");
-        assertEquals("Pending", result.getStatus(),
-                "The repair order should initially be pending.");
+        controller.createRepairOrder(problem, cristianoPhone, bikeSerialNo);
+
+        RepairOrderDTO createdOrder = controller.getRepairOrderInfo("RO4");
+
+        assertNotNull(createdOrder,
+                "The scenario repair order RO4 should exist after it is created.");
+        assertEquals("RO4", createdOrder.getId(),
+                "The created scenario order should have id RO4.");
+        assertEquals("Pending", createdOrder.getStatus(),
+                "A newly created repair order should have status Pending.");
+        assertEquals(0, createdOrder.getTotalCost(),
+                "A newly created repair order should not have any repair costs yet.");
     }
 
     @Test
-    public void testFindLatestRepairOrderForCristianoAfterCreatingNewOrder() {
-        controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
+    public void latestCristianoOrderShouldBeRO4AfterCreatingScenarioOrder() {
+        String cristianoPhone = "0737654321";
 
-        RepairOrderDTO result = controller.findRepairOrder("0737654321");
+        controller.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
 
-        assertNotNull(result, "A repair order should be found.");
-        assertEquals("RO4", result.getId(),
-                "The latest repair order for Cristiano Ronaldo should be RO4.");
+        RepairOrderDTO latestOrder = controller.findRepairOrder(cristianoPhone);
+
+        assertNotNull(latestOrder,
+                "A repair order should be found for Cristiano Ronaldo.");
+        assertEquals("RO4", latestOrder.getId(),
+                "The latest repair order for Cristiano Ronaldo should be the newly created RO4.");
     }
 
     @Test
-    public void testAddDiagnosticResultsFromViewScenario() {
+    public void diagnosticResultsShouldBeAddedToScenarioOrder() {
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
         controller.addDiagnosticResult("RO4", "Wheel is damaged");
         controller.addDiagnosticResult("RO4", "Headlights are broken");
 
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO4");
+        RepairOrderDTO scenarioOrder = controller.getRepairOrderInfo("RO4");
 
-        assertNotNull(result, "Repair order RO4 should exist after adding diagnostics.");
-        assertEquals("RO4", result.getId(),
-                "Diagnostics should be added to the correct repair order.");
+        assertNotNull(scenarioOrder,
+                "RO4 should still exist after adding diagnostic results.");
+        assertEquals("RO4", scenarioOrder.getId(),
+                "The diagnostic results should be connected to the scenario repair order.");
     }
 
     @Test
-    public void testAddRepairTasksFromViewScenario() {
+    public void scenarioRepairTasksShouldUpdateTasksAndTotalCost() {
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
-        controller.addRepairTask("RO4", "Replace wheel", 999);
-        controller.addRepairTask("RO4", "Fix wiring", 499);
+        String wheelTask = "Replace wheel";
+        String wiringTask = "Fix wiring";
 
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO4");
+        controller.addRepairTask("RO4", wheelTask, 999);
+        controller.addRepairTask("RO4", wiringTask, 499);
 
-        assertNotNull(result, "Repair order RO4 should exist.");
-        assertEquals(1498, result.getTotalCost(),
-                "Total cost should be 999 + 499.");
-        assertEquals("Replace wheel", result.getTasks().get(0),
-                "First repair task should be Replace wheel.");
-        assertEquals("Fix wiring", result.getTasks().get(1),
-                "Second repair task should be Fix wiring.");
+        RepairOrderDTO scenarioOrder = controller.getRepairOrderInfo("RO4");
+
+        assertNotNull(scenarioOrder,
+                "RO4 should exist after adding repair tasks.");
+        assertEquals(1498, scenarioOrder.getTotalCost(),
+                "The total cost should be the sum of the two scenario repair tasks.");
+        assertEquals(wheelTask, scenarioOrder.getTasks().get(0),
+                "The first repair task should be the wheel replacement.");
+        assertEquals(wiringTask, scenarioOrder.getTasks().get(1),
+                "The second repair task should be the wiring repair.");
     }
 
     @Test
-    public void testAcceptRepairOrderFromViewScenario() {
+    public void scenarioOrderShouldBecomeAcceptedWhenAcceptedThroughController() {
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
-
         controller.addRepairTask("RO4", "Replace wheel", 999);
         controller.addRepairTask("RO4", "Fix wiring", 499);
+
         controller.acceptRepairOrder("RO4");
 
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO4");
+        RepairOrderDTO acceptedOrder = controller.getRepairOrderInfo("RO4");
 
-        assertEquals("Accepted", result.getStatus(),
-                "Repair order RO4 should be accepted.");
+        assertEquals("Accepted", acceptedOrder.getStatus(),
+                "The scenario repair order should have status Accepted.");
     }
 
     @Test
-    public void testRejectExistingRepairOrder() {
+    public void existingRO2ShouldBecomeRejectedWhenRejectedThroughController() {
         controller.rejectRepairOrder("RO2");
 
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO2");
+        RepairOrderDTO rejectedOrder = controller.getRepairOrderInfo("RO2");
 
-        assertEquals("Rejected", result.getStatus(),
-                "Repair order RO2 should be rejected.");
+        assertEquals("Rejected", rejectedOrder.getStatus(),
+                "The existing repair order RO2 should have status Rejected.");
     }
 
     @Test
-    public void testGetRepairOrderThatDoesNotExist() {
-        RepairOrderDTO result = controller.getRepairOrderInfo("RO99");
+    public void controllerShouldReturnNullForMissingRepairOrderId() {
+        RepairOrderDTO missingOrder = controller.getRepairOrderInfo("RO99");
 
-        assertNull(result, "A repair order that does not exist should return null.");
+        assertNull(missingOrder,
+                "A repair order id that does not exist should return null.");
     }
 }

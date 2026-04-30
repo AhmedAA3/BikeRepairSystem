@@ -6,95 +6,115 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RepairOrderTest {
-    private RepairOrder repairOrder;
+    private RepairOrder repairOrderInScenario;
 
     @BeforeEach
     public void setUp() {
-        repairOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
+        repairOrderInScenario = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
     }
 
     @Test
-    public void testNewRepairOrderFromViewScenarioHasCorrectData() {
-        assertEquals("RO4", repairOrder.getRepairOrderId(),
-                "Wrong repair order id.");
-        assertEquals("Wheel is broken", repairOrder.getProblemDescription(),
-                "Wrong problem description.");
-        assertEquals("0737654321", repairOrder.getCustomerPhone(),
-                "Wrong customer phone.");
-        assertEquals("RJL403", repairOrder.getBikeSerialNo(),
-                "Wrong bike serial number.");
+    public void scenarioOrderShouldBeCreatedWithPendingStatus() {
+        assertEquals("Pending", repairOrderInScenario.getStatus(),
+                "The repair order should be pending when it is first created.");
     }
 
     @Test
-    public void testNewRepairOrderIsPending() {
-        assertEquals("Pending", repairOrder.getStatus(),
-                "A new repair order should be pending.");
+    public void scenarioOrderShouldStoreCustomerAndBikeInformation() {
+        String expectedCustomerPhone = "0737654321";
+        String expectedBikeSerialNo = "RJL403";
+
+        assertEquals(expectedCustomerPhone, repairOrderInScenario.getCustomerPhone(),
+                "The customer phone number should be stored in the repair order.");
+        assertEquals(expectedBikeSerialNo, repairOrderInScenario.getBikeSerialNo(),
+                "The bike serial number should be stored in the repair order.");
     }
 
     @Test
-    public void testAddDiagnosticResultsFromViewScenario() {
-        repairOrder.addDiagnosticResult("Wheel is damaged");
-        repairOrder.addDiagnosticResult("Headlights are broken");
+    public void scenarioOrderShouldStoreOrderIdAndProblemDescription() {
+        String expectedOrderId = "RO4";
+        String expectedProblem = "Wheel is broken";
 
-        assertEquals("Wheel is damaged", repairOrder.getDiagnosticResults().get(0),
-                "First diagnostic result is wrong.");
-        assertEquals("Headlights are broken", repairOrder.getDiagnosticResults().get(1),
-                "Second diagnostic result is wrong.");
+        assertEquals(expectedOrderId, repairOrderInScenario.getRepairOrderId(),
+                "The repair order id should be RO4.");
+        assertEquals(expectedProblem, repairOrderInScenario.getProblemDescription(),
+                "The problem description should match the scenario.");
     }
 
     @Test
-    public void testAddRepairTasksFromViewScenario() {
-        repairOrder.addRepairTask("Replace wheel", 999);
-        repairOrder.addRepairTask("Fix wiring", 499);
+    public void addedDiagnosticResultsShouldRemainInCorrectOrder() {
+        String damagedWheel = "Wheel is damaged";
+        String brokenHeadlights = "Headlights are broken";
 
-        assertEquals("Replace wheel", repairOrder.getRepairTasks().get(0),
-                "First repair task is wrong.");
-        assertEquals("Fix wiring", repairOrder.getRepairTasks().get(1),
-                "Second repair task is wrong.");
+        repairOrderInScenario.addDiagnosticResult(damagedWheel);
+        repairOrderInScenario.addDiagnosticResult(brokenHeadlights);
+
+        assertEquals(damagedWheel, repairOrderInScenario.getDiagnosticResults().get(0),
+                "The first diagnostic result should describe the damaged wheel.");
+        assertEquals(brokenHeadlights, repairOrderInScenario.getDiagnosticResults().get(1),
+                "The second diagnostic result should describe the broken headlights.");
     }
 
     @Test
-    public void testTotalCostFromViewScenario() {
-        repairOrder.addRepairTask("Replace wheel", 999);
-        repairOrder.addRepairTask("Fix wiring", 499);
+    public void addedRepairTasksShouldRemainInCorrectOrder() {
+        String replaceWheelTask = "Replace wheel";
+        String fixWiringTask = "Fix wiring";
 
-        assertEquals(1498, repairOrder.getTotalCost(),
-                "Total cost should be 999 + 499.");
+        repairOrderInScenario.addRepairTask(replaceWheelTask, 999);
+        repairOrderInScenario.addRepairTask(fixWiringTask, 499);
+
+        assertEquals(replaceWheelTask, repairOrderInScenario.getRepairTasks().get(0),
+                "The first repair task should be to replace the wheel.");
+        assertEquals(fixWiringTask, repairOrderInScenario.getRepairTasks().get(1),
+                "The second repair task should be to fix the wiring.");
     }
 
     @Test
-    public void testAcceptRepairOrderFromViewScenario() {
-        repairOrder.accept();
+    public void totalCostShouldIncludeAllScenarioRepairTasks() {
+        int replaceWheelPrice = 999;
+        int fixWiringPrice = 499;
+        int expectedTotalCost = replaceWheelPrice + fixWiringPrice;
 
-        assertTrue(repairOrder.isAccepted(),
-                "Repair order should be accepted.");
-        assertEquals("Accepted", repairOrder.getStatus(),
-                "Accepted repair order should have status Accepted.");
+        repairOrderInScenario.addRepairTask("Replace wheel", replaceWheelPrice);
+        repairOrderInScenario.addRepairTask("Fix wiring", fixWiringPrice);
+
+        assertEquals(expectedTotalCost, repairOrderInScenario.getTotalCost(),
+                "The total cost should include both repair tasks.");
     }
 
     @Test
-    public void testRejectRepairOrder() {
-        repairOrder.reject();
+    public void acceptedOrderShouldReportAcceptedStatus() {
+        repairOrderInScenario.accept();
 
-        assertTrue(repairOrder.isRejected(),
-                "Repair order should be rejected.");
-        assertEquals("Rejected", repairOrder.getStatus(),
-                "Rejected repair order should have status Rejected.");
+        assertTrue(repairOrderInScenario.isAccepted(),
+                "The repair order should report that it is accepted.");
+        assertEquals("Accepted", repairOrderInScenario.getStatus(),
+                "The repair order status should be Accepted.");
     }
 
     @Test
-    public void testEmptyRepairTaskIsNotAdded() {
-        repairOrder.addRepairTask("   ", 999);
+    public void rejectedOrderShouldReportRejectedStatus() {
+        repairOrderInScenario.reject();
 
-        assertEquals(0, repairOrder.getRepairTasks().size(),
-                "Empty repair task should not be added.");
+        assertTrue(repairOrderInScenario.isRejected(),
+                "The repair order should report that it is rejected.");
+        assertEquals("Rejected", repairOrderInScenario.getStatus(),
+                "The repair order status should be Rejected.");
     }
 
     @Test
-    public void testNegativeRepairTaskCostIsNotAdded() {
-        repairOrder.addRepairTask("Replace wheel", -999);
+    public void repairTaskWithBlankDescriptionShouldBeIgnored() {
+        repairOrderInScenario.addRepairTask("   ", 999);
 
-        assertEquals(0, repairOrder.getRepairTasks().size(),
-                "Repair task with negative cost should not be added.");
+        assertEquals(0, repairOrderInScenario.getRepairTasks().size(),
+                "A repair task with a blank description should not be added.");
+    }
+
+    @Test
+    public void repairTaskWithNegativePriceShouldBeIgnored() {
+        repairOrderInScenario.addRepairTask("Replace wheel", -999);
+
+        assertEquals(0, repairOrderInScenario.getRepairTasks().size(),
+                "A repair task with a negative price should not be added.");
     }
 }

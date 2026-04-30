@@ -6,78 +6,88 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DiagnosticReportTest {
-    private DiagnosticReport diagnosticReport;
+    private DiagnosticReport reportUnderTest;
 
     @BeforeEach
     public void setUp() {
-        diagnosticReport = new DiagnosticReport();
+        reportUnderTest = new DiagnosticReport();
     }
 
     @Test
-    public void testNewDiagnosticReportHasNoResults() {
-        assertFalse(diagnosticReport.hasResults(),
-                "A new diagnostic report should not have results.");
+    public void newReportShouldStartWithoutDiagnosticResults() {
+        assertFalse(reportUnderTest.hasResults(),
+                "A newly created diagnostic report should not contain any results.");
     }
 
     @Test
-    public void testAddWheelIsDamagedDiagnosticResult() {
-        diagnosticReport.addDiagnosticResult("Wheel is damaged");
+    public void wheelDamageResultShouldBeStored() {
+        String diagnosticText = "Wheel is damaged";
 
-        assertTrue(diagnosticReport.hasResults(),
-                "Diagnostic report should have results after adding Wheel is damaged.");
-        assertEquals("Wheel is damaged", diagnosticReport.getDiagnosticResults().get(0),
-                "Diagnostic result was not stored correctly.");
+        reportUnderTest.addDiagnosticResult(diagnosticText);
+
+        assertTrue(reportUnderTest.hasResults(),
+                "The report should contain results after a diagnostic result has been added.");
+        assertEquals(diagnosticText, reportUnderTest.getDiagnosticResults().get(0),
+                "The wheel damage diagnostic result should be stored as the first result.");
     }
 
     @Test
-    public void testAddHeadlightsAreBrokenDiagnosticResult() {
-        diagnosticReport.addDiagnosticResult("Headlights are broken");
+    public void headlightsProblemResultShouldBeStored() {
+        String diagnosticText = "Headlights are broken";
 
-        assertEquals("Headlights are broken", diagnosticReport.getDiagnosticResults().get(0),
-                "Diagnostic result was not stored correctly.");
+        reportUnderTest.addDiagnosticResult(diagnosticText);
+
+        assertEquals(diagnosticText, reportUnderTest.getDiagnosticResults().get(0),
+                "The headlights diagnostic result should be stored correctly.");
     }
 
     @Test
-    public void testAddTwoDiagnosticResultsFromViewScenario() {
-        diagnosticReport.addDiagnosticResult("Wheel is damaged");
-        diagnosticReport.addDiagnosticResult("Headlights are broken");
+    public void viewScenarioDiagnosticResultsShouldKeepInsertionOrder() {
+        String firstResult = "Wheel is damaged";
+        String secondResult = "Headlights are broken";
 
-        assertEquals(2, diagnosticReport.getDiagnosticResults().size(),
-                "There should be two diagnostic results.");
-        assertEquals("Wheel is damaged", diagnosticReport.getDiagnosticResults().get(0),
-                "First diagnostic result is wrong.");
-        assertEquals("Headlights are broken", diagnosticReport.getDiagnosticResults().get(1),
-                "Second diagnostic result is wrong.");
+        reportUnderTest.addDiagnosticResult(firstResult);
+        reportUnderTest.addDiagnosticResult(secondResult);
+
+        assertEquals(2, reportUnderTest.getDiagnosticResults().size(),
+                "The report should contain the two diagnostic results from the scenario.");
+        assertEquals(firstResult, reportUnderTest.getDiagnosticResults().get(0),
+                "The first diagnostic result should be the wheel damage result.");
+        assertEquals(secondResult, reportUnderTest.getDiagnosticResults().get(1),
+                "The second diagnostic result should be the headlights result.");
     }
 
     @Test
-    public void testEmptyDiagnosticResultIsNotAdded() {
-        diagnosticReport.addDiagnosticResult("   ");
+    public void blankDiagnosticResultShouldBeIgnored() {
+        reportUnderTest.addDiagnosticResult("   ");
 
-        assertFalse(diagnosticReport.hasResults(),
-                "Empty diagnostic result should not be added.");
+        assertFalse(reportUnderTest.hasResults(),
+                "A blank diagnostic result should not be added to the report.");
     }
 
     @Test
-    public void testNullDiagnosticResultIsNotAdded() {
-        diagnosticReport.addDiagnosticResult(null);
+    public void nullDiagnosticResultShouldBeIgnored() {
+        reportUnderTest.addDiagnosticResult(null);
 
-        assertFalse(diagnosticReport.hasResults(),
-                "Null diagnostic result should not be added.");
+        assertFalse(reportUnderTest.hasResults(),
+                "A null diagnostic result should not be added to the report.");
     }
 
     @Test
-    public void testCopyDiagnosticReport() {
-        diagnosticReport.addDiagnosticResult("Wheel is damaged");
-        diagnosticReport.addDiagnosticResult("Headlights are broken");
+    public void copiedReportShouldContainSameScenarioResults() {
+        String wheelResult = "Wheel is damaged";
+        String headlightsResult = "Headlights are broken";
 
-        DiagnosticReport copy = new DiagnosticReport(diagnosticReport);
+        reportUnderTest.addDiagnosticResult(wheelResult);
+        reportUnderTest.addDiagnosticResult(headlightsResult);
 
-        assertEquals(2, copy.getDiagnosticResults().size(),
-                "Copied diagnostic report should contain two results.");
-        assertEquals("Wheel is damaged", copy.getDiagnosticResults().get(0),
-                "First copied diagnostic result is wrong.");
-        assertEquals("Headlights are broken", copy.getDiagnosticResults().get(1),
-                "Second copied diagnostic result is wrong.");
+        DiagnosticReport copiedReport = new DiagnosticReport(reportUnderTest);
+
+        assertEquals(2, copiedReport.getDiagnosticResults().size(),
+                "The copied diagnostic report should contain both scenario results.");
+        assertEquals(wheelResult, copiedReport.getDiagnosticResults().get(0),
+                "The first copied result should match the original first result.");
+        assertEquals(headlightsResult, copiedReport.getDiagnosticResults().get(1),
+                "The second copied result should match the original second result.");
     }
 }

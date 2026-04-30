@@ -1,7 +1,5 @@
 package MVCsem2.model.dto;
 
-
-
 import MVCsem2.model.entity.Bike;
 import MVCsem2.model.entity.Customer;
 import org.junit.jupiter.api.Test;
@@ -11,17 +9,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerDetailsDTOTest {
 
     @Test
-    public void testCustomerDetailsDTOCopiesCristianoRonaldoData() {
-        Customer customer = new Customer("Cristiano Ronaldo", "CR7@mail.com", "0737654321",
-                new Bike("Scotter", " 1", "SET401"));
+    public void cristianoRonaldoDetailsShouldBeCopiedToDTO() {
+        String customerName = "Cristiano Ronaldo";
+        String customerEmail = "CR7@mail.com";
+        String customerPhone = "0737654321";
 
-        CustomerDetailsDTO result = new CustomerDetailsDTO(customer);
+        Bike registeredBike = new Bike("Scotter", " 1", "SET401");
+        Customer cristiano = new Customer(customerName, customerEmail, customerPhone, registeredBike);
 
-        assertEquals("Cristiano Ronaldo", result.getName(),
-                "DTO should copy customer name.");
-        assertEquals("CR7@mail.com", result.getEmail(),
-                "DTO should copy customer email.");
-        assertEquals("0737654321", result.getPhone(),
-                "DTO should copy customer phone.");
+        CustomerDetailsDTO customerDetails = new CustomerDetailsDTO(cristiano);
+
+        assertEquals(customerName, customerDetails.getName(),
+                "The DTO should contain Cristiano Ronaldo's name.");
+        assertEquals(customerEmail, customerDetails.getEmail(),
+                "The DTO should contain Cristiano Ronaldo's email.");
+        assertEquals(customerPhone, customerDetails.getPhone(),
+                "The DTO should contain Cristiano Ronaldo's phone number.");
     }
 }

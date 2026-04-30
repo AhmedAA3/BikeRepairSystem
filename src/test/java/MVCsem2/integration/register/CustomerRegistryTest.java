@@ -7,41 +7,50 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerRegistryTest {
-    private CustomerRegistry customerRegistry;
+    private CustomerRegistry registry;
 
     @BeforeEach
     public void setUp() {
-        customerRegistry = new CustomerRegistry();
+        registry = new CustomerRegistry();
     }
 
     @Test
-    public void testFindCristianoRonaldoByPhoneNumber() {
-        Customer result = customerRegistry.findCustomer("0737654321");
+    public void cristianoRonaldoShouldBeFoundByRegisteredPhoneNumber() {
+        String cristianoPhone = "0737654321";
 
-        assertNotNull(result, "Cristiano Ronaldo should be found.");
-        assertEquals("Cristiano Ronaldo", result.getName(),
-                "Wrong customer was found.");
-        assertEquals("CR7@mail.com", result.getEmail(),
-                "Wrong email was returned.");
-        assertEquals("0737654321", result.getPhoneNumber(),
-                "Wrong phone number was returned.");
+        Customer cristiano = registry.findCustomer(cristianoPhone);
+
+        assertNotNull(cristiano,
+                "Cristiano Ronaldo should exist in the hardcoded customer registry.");
+        assertEquals("Cristiano Ronaldo", cristiano.getName(),
+                "The registry should return Cristiano Ronaldo for this phone number.");
+        assertEquals("CR7@mail.com", cristiano.getEmail(),
+                "Cristiano Ronaldo's email should match the hardcoded customer data.");
+        assertEquals(cristianoPhone, cristiano.getPhoneNumber(),
+                "Cristiano Ronaldo's phone number should match the search value.");
     }
 
     @Test
-    public void testCristianoRonaldoBikeDataExists() {
-        Customer result = customerRegistry.findCustomer("0737654321");
+    public void cristianoRonaldoShouldHaveExpectedBikeInformation() {
+        String cristianoPhone = "0737654321";
 
-        assertNotNull(result.getBike(), "Cristiano Ronaldo should have a bike.");
-        assertEquals("Scotter", result.getBike().getBrand(),
-                "Wrong bike brand was returned.");
-        assertEquals("SET401", result.getBike().getSerialNumber(),
-                "Wrong bike serial number was returned.");
+        Customer cristiano = registry.findCustomer(cristianoPhone);
+
+        assertNotNull(cristiano,
+                "Cristiano Ronaldo should be found before checking bike information.");
+        assertNotNull(cristiano.getBike(),
+                "Cristiano Ronaldo should have a registered bike.");
+        assertEquals("Scotter", cristiano.getBike().getBrand(),
+                "The registered bike brand should match the hardcoded data.");
+        assertEquals("SET401", cristiano.getBike().getSerialNumber(),
+                "The registered bike serial number should match the hardcoded data.");
     }
 
     @Test
-    public void testFindCustomerThatDoesNotExist() {
-        Customer result = customerRegistry.findCustomer("0000000000");
+    public void unknownPhoneNumberShouldNotReturnCustomer() {
+        Customer missingCustomer = registry.findCustomer("0000000000");
 
-        assertNull(result, "A customer that does not exist should return null.");
+        assertNull(missingCustomer,
+                "A phone number that is not registered should not return a customer.");
     }
 }

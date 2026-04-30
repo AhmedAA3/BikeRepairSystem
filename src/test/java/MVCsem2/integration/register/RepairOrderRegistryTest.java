@@ -7,105 +7,119 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RepairOrderRegistryTest {
-    private RepairOrderRegistry repairOrderRegistry;
+    private RepairOrderRegistry registry;
 
     @BeforeEach
     public void setUp() {
-        repairOrderRegistry = new RepairOrderRegistry();
+        registry = new RepairOrderRegistry();
     }
 
     @Test
-    public void testInitialRegistryHasThreeRepairOrders() {
-        RepairOrder[] result = repairOrderRegistry.findAllRepairOrders();
+    public void registryShouldContainTheHardcodedOrdersAtStartup() {
+        RepairOrder[] ordersInRegistry = registry.findAllRepairOrders();
 
-        assertEquals(3, result.length,
-                "The registry should start with three hardcoded repair orders.");
+        assertEquals(3, ordersInRegistry.length,
+                "The registry should contain the three hardcoded repair orders at startup.");
     }
 
     @Test
-    public void testFindCristianoRepairOrderRO2() {
-        RepairOrder result = repairOrderRegistry.findRepairOrder("0737654321");
+    public void cristianoShouldHaveTheHardcodedRO2RepairOrder() {
+        String cristianoPhone = "0737654321";
 
-        assertNotNull(result, "Cristiano Ronaldo's repair order should be found.");
-        assertEquals("RO2", result.getRepairOrderId(),
-                "Cristiano Ronaldo's hardcoded repair order should be RO2.");
-        assertEquals("Brakes need adjustment", result.getProblemDescription(),
-                "Wrong problem description was returned.");
-        assertEquals("BIKE200", result.getBikeSerialNo(),
-                "Wrong bike serial number was returned.");
+        RepairOrder cristianoOrder = registry.findRepairOrder(cristianoPhone);
+
+        assertNotNull(cristianoOrder,
+                "Cristiano Ronaldo's hardcoded repair order should be found.");
+        assertEquals("RO2", cristianoOrder.getRepairOrderId(),
+                "The hardcoded repair order for Cristiano Ronaldo should be RO2.");
+        assertEquals("Brakes need adjustment", cristianoOrder.getProblemDescription(),
+                "The hardcoded problem description for RO2 should be returned.");
+        assertEquals("BIKE200", cristianoOrder.getBikeSerialNo(),
+                "The hardcoded bike serial number for RO2 should be returned.");
     }
 
     @Test
-    public void testGetRepairOrderRO2() {
-        RepairOrder result = repairOrderRegistry.getRepairOrder("RO2");
+    public void ro2ShouldBePossibleToFindByRepairOrderId() {
+        RepairOrder order = registry.getRepairOrder("RO2");
 
-        assertNotNull(result, "Repair order RO2 should exist.");
-        assertEquals("Brakes need adjustment", result.getProblemDescription(),
-                "RO2 should have the hardcoded brakes problem.");
+        assertNotNull(order,
+                "RO2 should exist in the hardcoded registry.");
+        assertEquals("Brakes need adjustment", order.getProblemDescription(),
+                "RO2 should contain the hardcoded brakes problem.");
     }
 
     @Test
-    public void testCreateRepairOrderFromViewScenario() {
-        repairOrderRegistry.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
+    public void missingRepairOrderIdShouldReturnNull() {
+        RepairOrder missingOrder = registry.getRepairOrder("RO99");
 
-        RepairOrder result = repairOrderRegistry.getRepairOrder("RO4");
-
-        assertNotNull(result, "New repair order RO4 should exist.");
-        assertEquals("RO4", result.getRepairOrderId(),
-                "The created repair order should have id RO4.");
-        assertEquals("Wheel is broken", result.getProblemDescription(),
-                "The problem description should match the View scenario.");
-        assertEquals("0737654321", result.getCustomerPhone(),
-                "The customer phone should match Cristiano Ronaldo.");
-        assertEquals("RJL403", result.getBikeSerialNo(),
-                "The bike serial number should match the View scenario.");
+        assertNull(missingOrder,
+                "A repair order id that does not exist should return null.");
     }
 
     @Test
-    public void testCreateRepairOrderIncreasesNumberOfOrders() {
-        repairOrderRegistry.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
+    public void unknownCustomerPhoneShouldNotReturnRepairOrder() {
+        RepairOrder order = registry.findRepairOrder("0000000000");
 
-        RepairOrder[] result = repairOrderRegistry.findAllRepairOrders();
-
-        assertEquals(4, result.length,
-                "Creating a repair order should increase the number of orders to four.");
+        assertNull(order,
+                "An unknown phone number should not match any repair order.");
     }
 
     @Test
-    public void testFindLatestRepairOrderAfterCreatingRO4() {
-        repairOrderRegistry.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
+    public void creatingViewScenarioOrderShouldStoreRO4() {
+        String problem = "Wheel is broken";
+        String cristianoPhone = "0737654321";
+        String bikeSerialNo = "RJL403";
 
-        RepairOrder result = repairOrderRegistry.findRepairOrder("0737654321");
+        registry.createRepairOrder(problem, cristianoPhone, bikeSerialNo);
 
-        assertNotNull(result, "A repair order should be found.");
-        assertEquals("RO4", result.getRepairOrderId(),
-                "The latest repair order for Cristiano Ronaldo should be RO4.");
+        RepairOrder createdOrder = registry.getRepairOrder("RO4");
+
+        assertNotNull(createdOrder,
+                "The newly created scenario repair order should exist.");
+        assertEquals("RO4", createdOrder.getRepairOrderId(),
+                "The created scenario repair order should get id RO4.");
+        assertEquals(problem, createdOrder.getProblemDescription(),
+                "The created order should store the scenario problem description.");
+        assertEquals(cristianoPhone, createdOrder.getCustomerPhone(),
+                "The created order should store Cristiano Ronaldo's phone number.");
+        assertEquals(bikeSerialNo, createdOrder.getBikeSerialNo(),
+                "The created order should store the bike serial number from the scenario.");
     }
 
     @Test
-    public void testUpdateRepairOrderToAccepted() {
-        RepairOrder repairOrder = repairOrderRegistry.getRepairOrder("RO2");
-        repairOrder.accept();
+    public void creatingScenarioOrderShouldIncreaseRegistrySize() {
+        registry.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
-        repairOrderRegistry.updateRepairOrder(repairOrder);
+        RepairOrder[] ordersAfterCreate = registry.findAllRepairOrders();
 
-        RepairOrder result = repairOrderRegistry.getRepairOrder("RO2");
-
-        assertEquals("Accepted", result.getStatus(),
-                "The updated repair order should be accepted.");
+        assertEquals(4, ordersAfterCreate.length,
+                "The registry should contain four repair orders after creating RO4.");
     }
 
     @Test
-    public void testGetRepairOrderThatDoesNotExist() {
-        RepairOrder result = repairOrderRegistry.getRepairOrder("RO99");
+    public void latestCristianoOrderShouldBeRO4AfterScenarioOrderIsCreated() {
+        String cristianoPhone = "0737654321";
 
-        assertNull(result, "A repair order that does not exist should return null.");
+        registry.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
+
+        RepairOrder latestOrder = registry.findRepairOrder(cristianoPhone);
+
+        assertNotNull(latestOrder,
+                "A repair order should be found for Cristiano Ronaldo.");
+        assertEquals("RO4", latestOrder.getRepairOrderId(),
+                "The latest repair order for Cristiano Ronaldo should be the newly created RO4.");
     }
 
     @Test
-    public void testFindRepairOrderByUnknownPhoneNumber() {
-        RepairOrder result = repairOrderRegistry.findRepairOrder("0000000000");
+    public void updatedRepairOrderShouldKeepAcceptedStatus() {
+        RepairOrder orderToUpdate = registry.getRepairOrder("RO2");
+        orderToUpdate.accept();
 
-        assertNull(result, "Unknown phone number should not return a repair order.");
+        registry.updateRepairOrder(orderToUpdate);
+
+        RepairOrder storedOrder = registry.getRepairOrder("RO2");
+
+        assertEquals("Accepted", storedOrder.getStatus(),
+                "The registry should keep the updated accepted status.");
     }
 }

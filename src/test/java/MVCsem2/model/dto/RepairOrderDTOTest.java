@@ -8,60 +8,66 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RepairOrderDTOTest {
 
     @Test
-    public void testRepairOrderDTOCopiesViewScenarioData() {
-        RepairOrder repairOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
+    public void dtoShouldContainBasicInformationFromScenarioOrder() {
+        RepairOrder orderFromScenario = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
 
-        RepairOrderDTO result = new RepairOrderDTO(repairOrder);
+        RepairOrderDTO orderDetails = new RepairOrderDTO(orderFromScenario);
 
-        assertEquals("RO4", result.getId(),
-                "DTO should copy the repair order id.");
-        assertEquals("Pending", result.getStatus(),
-                "DTO should copy the repair order status.");
-        assertEquals(0, result.getTotalCost(),
-                "DTO should copy the repair order total cost.");
+        assertEquals("RO4", orderDetails.getId(),
+                "The DTO should contain the repair order id from the scenario.");
+        assertEquals("Pending", orderDetails.getStatus(),
+                "The DTO should contain the initial repair order status.");
+        assertEquals(0, orderDetails.getTotalCost(),
+                "The DTO should contain zero total cost before repair tasks are added.");
     }
 
     @Test
-    public void testRepairOrderDTOCopiesViewScenarioRepairTasks() {
-        RepairOrder repairOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
-        repairOrder.addRepairTask("Replace wheel", 999);
-        repairOrder.addRepairTask("Fix wiring", 499);
+    public void dtoShouldCopyRepairTasksAndTotalCostFromScenarioOrder() {
+        RepairOrder orderWithTasks = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
 
-        RepairOrderDTO result = new RepairOrderDTO(repairOrder);
+        String wheelTask = "Replace wheel";
+        String wiringTask = "Fix wiring";
+        int wheelCost = 999;
+        int wiringCost = 499;
 
-        assertEquals("Replace wheel", result.getTasks().get(0),
-                "DTO should copy Replace wheel.");
-        assertEquals("Fix wiring", result.getTasks().get(1),
-                "DTO should copy Fix wiring.");
-        assertEquals(1498, result.getTotalCost(),
-                "DTO should copy the total cost 1498.");
+        orderWithTasks.addRepairTask(wheelTask, wheelCost);
+        orderWithTasks.addRepairTask(wiringTask, wiringCost);
+
+        RepairOrderDTO orderDetails = new RepairOrderDTO(orderWithTasks);
+
+        assertEquals(wheelTask, orderDetails.getTasks().get(0),
+                "The first task in the DTO should be the wheel replacement.");
+        assertEquals(wiringTask, orderDetails.getTasks().get(1),
+                "The second task in the DTO should be the wiring repair.");
+        assertEquals(wheelCost + wiringCost, orderDetails.getTotalCost(),
+                "The DTO should contain the total cost of the scenario repair tasks.");
     }
 
     @Test
-    public void testRepairOrderDTOCopiesAcceptedStatus() {
-        RepairOrder repairOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
-        repairOrder.accept();
+    public void dtoShouldShowAcceptedStatusAfterOrderIsAccepted() {
+        RepairOrder acceptedOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
+        acceptedOrder.accept();
 
-        RepairOrderDTO result = new RepairOrderDTO(repairOrder);
+        RepairOrderDTO orderDetails = new RepairOrderDTO(acceptedOrder);
 
-        assertEquals("Accepted", result.getStatus(),
-                "DTO should copy accepted status.");
+        assertEquals("Accepted", orderDetails.getStatus(),
+                "The DTO should contain the updated accepted status.");
     }
 
     @Test
-    public void testCreateRepairOrderDTOArray() {
-        RepairOrder[] repairOrders = new RepairOrder[] {
-                new RepairOrder("RO1", "", "0701234567", "BIKE100"),
-                new RepairOrder("RO2", "Brakes need adjustment", "0737654321", "BIKE200"),
-                new RepairOrder("RO3", "Motor makes strange noise", "0761112233", "BIKE300"),
-                new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403")
-        };
+    public void dtoArrayShouldKeepSameNumberOfRepairOrders() {
+        RepairOrder firstOrder = new RepairOrder("RO1", "", "0701234567", "BIKE100");
+        RepairOrder cristianoOrder = new RepairOrder("RO2", "Brakes need adjustment", "0737654321", "BIKE200");
+        RepairOrder motorOrder = new RepairOrder("RO3", "Motor makes strange noise", "0761112233", "BIKE300");
+        RepairOrder wheelOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
 
-        RepairOrderDTO[] result = RepairOrderDTO.createRepairOrderDTO(repairOrders);
+        RepairOrder[] orders = { firstOrder, cristianoOrder, motorOrder, wheelOrder };
 
-        assertEquals(4, result.length,
-                "DTO array should have the same length as the repair order array.");
-        assertEquals("RO4", result[3].getId(),
-                "Last DTO should be RO4.");
+        RepairOrderDTO[] orderDTOs = RepairOrderDTO.createRepairOrderDTO(orders);
+
+        assertEquals(4, orderDTOs.length,
+                "The DTO array should contain one DTO for each repair order.");
+        assertEquals("RO4", orderDTOs[3].getId(),
+                "The last DTO should represent the scenario repair order.");
     }
 }
