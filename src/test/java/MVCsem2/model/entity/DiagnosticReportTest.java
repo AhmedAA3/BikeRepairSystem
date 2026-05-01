@@ -10,17 +10,21 @@ public class DiagnosticReportTest {
 
     @BeforeEach
     public void setUp() {
+
         reportUnderTest = new DiagnosticReport();
     }
 
+
     @Test
     public void newReportShouldStartWithoutDiagnosticResults() {
+
         assertFalse(reportUnderTest.hasResults(),
                 "A newly created diagnostic report should not contain any results.");
     }
 
     @Test
     public void wheelDamageResultShouldBeStored() {
+
         String diagnosticText = "Wheel is damaged";
 
         reportUnderTest.addDiagnosticResult(diagnosticText);
@@ -33,6 +37,7 @@ public class DiagnosticReportTest {
 
     @Test
     public void headlightsProblemResultShouldBeStored() {
+
         String diagnosticText = "Headlights are broken";
 
         reportUnderTest.addDiagnosticResult(diagnosticText);
@@ -43,6 +48,7 @@ public class DiagnosticReportTest {
 
     @Test
     public void viewScenarioDiagnosticResultsShouldKeepInsertionOrder() {
+
         String firstResult = "Wheel is damaged";
         String secondResult = "Headlights are broken";
 
@@ -59,6 +65,7 @@ public class DiagnosticReportTest {
 
     @Test
     public void blankDiagnosticResultShouldBeIgnored() {
+
         reportUnderTest.addDiagnosticResult("   ");
 
         assertFalse(reportUnderTest.hasResults(),
@@ -67,6 +74,7 @@ public class DiagnosticReportTest {
 
     @Test
     public void nullDiagnosticResultShouldBeIgnored() {
+
         reportUnderTest.addDiagnosticResult(null);
 
         assertFalse(reportUnderTest.hasResults(),
@@ -75,6 +83,7 @@ public class DiagnosticReportTest {
 
     @Test
     public void copiedReportShouldContainSameScenarioResults() {
+        
         String wheelResult = "Wheel is damaged";
         String headlightsResult = "Headlights are broken";
 

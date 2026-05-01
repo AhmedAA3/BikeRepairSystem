@@ -10,17 +10,20 @@ public class RepairOrderTest {
 
     @BeforeEach
     public void setUp() {
+
         repairOrderInScenario = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
     }
 
     @Test
     public void scenarioOrderShouldBeCreatedWithPendingStatus() {
+
         assertEquals("Pending", repairOrderInScenario.getStatus(),
                 "The repair order should be pending when it is first created.");
     }
 
     @Test
     public void scenarioOrderShouldStoreCustomerAndBikeInformation() {
+
         String expectedCustomerPhone = "0737654321";
         String expectedBikeSerialNo = "RJL403";
 
@@ -32,6 +35,7 @@ public class RepairOrderTest {
 
     @Test
     public void scenarioOrderShouldStoreOrderIdAndProblemDescription() {
+
         String expectedOrderId = "RO4";
         String expectedProblem = "Wheel is broken";
 
@@ -43,6 +47,7 @@ public class RepairOrderTest {
 
     @Test
     public void addedDiagnosticResultsShouldRemainInCorrectOrder() {
+
         String damagedWheel = "Wheel is damaged";
         String brokenHeadlights = "Headlights are broken";
 
@@ -57,6 +62,7 @@ public class RepairOrderTest {
 
     @Test
     public void addedRepairTasksShouldRemainInCorrectOrder() {
+
         String replaceWheelTask = "Replace wheel";
         String fixWiringTask = "Fix wiring";
 
@@ -71,6 +77,7 @@ public class RepairOrderTest {
 
     @Test
     public void totalCostShouldIncludeAllScenarioRepairTasks() {
+
         int replaceWheelPrice = 999;
         int fixWiringPrice = 499;
         int expectedTotalCost = replaceWheelPrice + fixWiringPrice;
@@ -84,6 +91,7 @@ public class RepairOrderTest {
 
     @Test
     public void acceptedOrderShouldReportAcceptedStatus() {
+
         repairOrderInScenario.accept();
 
         assertTrue(repairOrderInScenario.isAccepted(),
@@ -94,6 +102,7 @@ public class RepairOrderTest {
 
     @Test
     public void rejectedOrderShouldReportRejectedStatus() {
+
         repairOrderInScenario.reject();
 
         assertTrue(repairOrderInScenario.isRejected(),
@@ -104,6 +113,7 @@ public class RepairOrderTest {
 
     @Test
     public void repairTaskWithBlankDescriptionShouldBeIgnored() {
+
         repairOrderInScenario.addRepairTask("   ", 999);
 
         assertEquals(0, repairOrderInScenario.getRepairTasks().size(),
@@ -112,6 +122,7 @@ public class RepairOrderTest {
 
     @Test
     public void repairTaskWithNegativePriceShouldBeIgnored() {
+        
         repairOrderInScenario.addRepairTask("Replace wheel", -999);
 
         assertEquals(0, repairOrderInScenario.getRepairTasks().size(),

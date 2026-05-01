@@ -16,6 +16,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void registryShouldContainTheHardcodedOrdersAtStartup() {
+
         RepairOrder[] ordersInRegistry = registry.findAllRepairOrders();
 
         assertEquals(3, ordersInRegistry.length,
@@ -24,6 +25,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void cristianoShouldHaveTheHardcodedRO2RepairOrder() {
+
         String cristianoPhone = "0737654321";
 
         RepairOrder cristianoOrder = registry.findRepairOrder(cristianoPhone);
@@ -40,6 +42,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void ro2ShouldBePossibleToFindByRepairOrderId() {
+
         RepairOrder order = registry.getRepairOrder("RO2");
 
         assertNotNull(order,
@@ -50,6 +53,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void missingRepairOrderIdShouldReturnNull() {
+
         RepairOrder missingOrder = registry.getRepairOrder("RO99");
 
         assertNull(missingOrder,
@@ -58,6 +62,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void unknownCustomerPhoneShouldNotReturnRepairOrder() {
+
         RepairOrder order = registry.findRepairOrder("0000000000");
 
         assertNull(order,
@@ -66,6 +71,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void creatingViewScenarioOrderShouldStoreRO4() {
+
         String problem = "Wheel is broken";
         String cristianoPhone = "0737654321";
         String bikeSerialNo = "RJL403";
@@ -88,6 +94,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void creatingScenarioOrderShouldIncreaseRegistrySize() {
+
         registry.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
         RepairOrder[] ordersAfterCreate = registry.findAllRepairOrders();
@@ -98,6 +105,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void latestCristianoOrderShouldBeRO4AfterScenarioOrderIsCreated() {
+
         String cristianoPhone = "0737654321";
 
         registry.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
@@ -112,6 +120,7 @@ public class RepairOrderRegistryTest {
 
     @Test
     public void updatedRepairOrderShouldKeepAcceptedStatus() {
+        
         RepairOrder orderToUpdate = registry.getRepairOrder("RO2");
         orderToUpdate.accept();
 

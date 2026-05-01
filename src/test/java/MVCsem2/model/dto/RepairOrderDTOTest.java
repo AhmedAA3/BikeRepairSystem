@@ -9,6 +9,7 @@ public class RepairOrderDTOTest {
 
     @Test
     public void dtoShouldContainBasicInformationFromScenarioOrder() {
+
         RepairOrder orderFromScenario = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
 
         RepairOrderDTO orderDetails = new RepairOrderDTO(orderFromScenario);
@@ -23,6 +24,7 @@ public class RepairOrderDTOTest {
 
     @Test
     public void dtoShouldCopyRepairTasksAndTotalCostFromScenarioOrder() {
+
         RepairOrder orderWithTasks = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
 
         String wheelTask = "Replace wheel";
@@ -45,6 +47,7 @@ public class RepairOrderDTOTest {
 
     @Test
     public void dtoShouldShowAcceptedStatusAfterOrderIsAccepted() {
+
         RepairOrder acceptedOrder = new RepairOrder("RO4", "Wheel is broken", "0737654321", "RJL403");
         acceptedOrder.accept();
 
@@ -56,6 +59,7 @@ public class RepairOrderDTOTest {
 
     @Test
     public void dtoArrayShouldKeepSameNumberOfRepairOrders() {
+        
         RepairOrder firstOrder = new RepairOrder("RO1", "", "0701234567", "BIKE100");
         RepairOrder cristianoOrder = new RepairOrder("RO2", "Brakes need adjustment", "0737654321", "BIKE200");
         RepairOrder motorOrder = new RepairOrder("RO3", "Motor makes strange noise", "0761112233", "BIKE300");

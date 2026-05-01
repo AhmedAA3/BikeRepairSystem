@@ -15,6 +15,7 @@ public class ControllerTest {
 
     @BeforeEach
     public void setUp() {
+        
         CustomerRegistry customers = new CustomerRegistry();
         RepairOrderRegistry repairOrders = new RepairOrderRegistry();
         Printer printer = new Printer();
@@ -24,6 +25,7 @@ public class ControllerTest {
 
     @Test
     public void controllerShouldFindCristianoRonaldoByPhoneNumber() {
+
         String cristianoPhone = "0737654321";
 
         CustomerDetailsDTO customerDetails = controller.findCustomer(cristianoPhone);
@@ -40,6 +42,7 @@ public class ControllerTest {
 
     @Test
     public void controllerShouldReturnNullForUnknownCustomerPhone() {
+
         CustomerDetailsDTO customerDetails = controller.findCustomer("0000000000");
 
         assertNull(customerDetails,
@@ -48,6 +51,7 @@ public class ControllerTest {
 
     @Test
     public void cristianoShouldHaveExistingRO2BeforeNewScenarioOrderIsCreated() {
+
         String cristianoPhone = "0737654321";
 
         RepairOrderDTO existingOrder = controller.findRepairOrder(cristianoPhone);
@@ -62,6 +66,7 @@ public class ControllerTest {
 
     @Test
     public void creatingScenarioOrderShouldCreatePendingRO4() {
+
         String problem = "Wheel is broken";
         String cristianoPhone = "0737654321";
         String bikeSerialNo = "RJL403";
@@ -82,6 +87,7 @@ public class ControllerTest {
 
     @Test
     public void latestCristianoOrderShouldBeRO4AfterCreatingScenarioOrder() {
+
         String cristianoPhone = "0737654321";
 
         controller.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
@@ -96,6 +102,7 @@ public class ControllerTest {
 
     @Test
     public void diagnosticResultsShouldBeAddedToScenarioOrder() {
+
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
         controller.addDiagnosticResult("RO4", "Wheel is damaged");
@@ -111,6 +118,7 @@ public class ControllerTest {
 
     @Test
     public void scenarioRepairTasksShouldUpdateTasksAndTotalCost() {
+
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
 
         String wheelTask = "Replace wheel";
@@ -133,6 +141,7 @@ public class ControllerTest {
 
     @Test
     public void scenarioOrderShouldBecomeAcceptedWhenAcceptedThroughController() {
+
         controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
         controller.addRepairTask("RO4", "Replace wheel", 999);
         controller.addRepairTask("RO4", "Fix wiring", 499);
@@ -147,6 +156,7 @@ public class ControllerTest {
 
     @Test
     public void existingRO2ShouldBecomeRejectedWhenRejectedThroughController() {
+
         controller.rejectRepairOrder("RO2");
 
         RepairOrderDTO rejectedOrder = controller.getRepairOrderInfo("RO2");
@@ -157,6 +167,7 @@ public class ControllerTest {
 
     @Test
     public void controllerShouldReturnNullForMissingRepairOrderId() {
+
         RepairOrderDTO missingOrder = controller.getRepairOrderInfo("RO99");
 
         assertNull(missingOrder,

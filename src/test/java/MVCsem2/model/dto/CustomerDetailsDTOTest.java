@@ -10,6 +10,7 @@ public class CustomerDetailsDTOTest {
 
     @Test
     public void cristianoRonaldoDetailsShouldBeCopiedToDTO() {
+        
         String customerName = "Cristiano Ronaldo";
         String customerEmail = "CR7@mail.com";
         String customerPhone = "0737654321";

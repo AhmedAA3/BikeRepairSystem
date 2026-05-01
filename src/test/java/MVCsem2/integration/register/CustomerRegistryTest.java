@@ -11,11 +11,13 @@ public class CustomerRegistryTest {
 
     @BeforeEach
     public void setUp() {
+
         registry = new CustomerRegistry();
     }
 
     @Test
     public void cristianoRonaldoShouldBeFoundByRegisteredPhoneNumber() {
+
         String cristianoPhone = "0737654321";
 
         Customer cristiano = registry.findCustomer(cristianoPhone);
@@ -32,6 +34,7 @@ public class CustomerRegistryTest {
 
     @Test
     public void cristianoRonaldoShouldHaveExpectedBikeInformation() {
+
         String cristianoPhone = "0737654321";
 
         Customer cristiano = registry.findCustomer(cristianoPhone);
@@ -48,6 +51,7 @@ public class CustomerRegistryTest {
 
     @Test
     public void unknownPhoneNumberShouldNotReturnCustomer() {
+        
         Customer missingCustomer = registry.findCustomer("0000000000");
 
         assertNull(missingCustomer,
