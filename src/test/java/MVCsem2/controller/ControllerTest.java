@@ -24,11 +24,11 @@ public class ControllerTest {
     }
 
     @Test
-    public void controllerShouldFindCristianoRonaldoByPhoneNumber() {
+    public void controllerShouldFindRegisteredCustomerByPhoneNumber() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        CustomerDetailsDTO customerDetails = controller.findCustomer(cristianoPhone);
+        CustomerDetailsDTO customerDetails = controller.findCustomer(registeredCustomerPhone);
 
         assertNotNull(customerDetails,
                 "Cristiano Ronaldo should be found by his registered phone number.");
@@ -36,7 +36,7 @@ public class ControllerTest {
                 "The controller should return the correct customer name.");
         assertEquals("CR7@mail.com", customerDetails.getEmail(),
                 "The controller should return the correct customer email.");
-        assertEquals(cristianoPhone, customerDetails.getPhone(),
+        assertEquals(registeredCustomerPhone, customerDetails.getPhone(),
                 "The controller should return the same phone number that was searched for.");
     }
 
@@ -50,11 +50,11 @@ public class ControllerTest {
     }
 
     @Test
-    public void cristianoShouldHaveExistingRO2BeforeNewScenarioOrderIsCreated() {
+    public void registeredCustomerShouldHaveExistingRepairOrderBeforeNewScenarioOrderIsCreated() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        RepairOrderDTO existingOrder = controller.findRepairOrder(cristianoPhone);
+        RepairOrderDTO existingOrder = controller.findRepairOrder(registeredCustomerPhone);
 
         assertNotNull(existingOrder,
                 "Cristiano Ronaldo should already have a hardcoded repair order.");
@@ -68,10 +68,10 @@ public class ControllerTest {
     public void creatingScenarioOrderShouldCreatePendingRO4() {
 
         String problem = "Wheel is broken";
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
         String bikeSerialNo = "RJL403";
 
-        controller.createRepairOrder(problem, cristianoPhone, bikeSerialNo);
+        controller.createRepairOrder(problem, registeredCustomerPhone, bikeSerialNo);
 
         RepairOrderDTO createdOrder = controller.getRepairOrderInfo("RO4");
 
@@ -86,13 +86,13 @@ public class ControllerTest {
     }
 
     @Test
-    public void latestCristianoOrderShouldBeRO4AfterCreatingScenarioOrder() {
+    public void latestRegisteredCustomerOrderShouldBeRO4AfterCreatingScenarioOrder() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        controller.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
+        controller.createRepairOrder("Wheel is broken", registeredCustomerPhone, "RJL403");
 
-        RepairOrderDTO latestOrder = controller.findRepairOrder(cristianoPhone);
+        RepairOrderDTO latestOrder = controller.findRepairOrder(registeredCustomerPhone);
 
         assertNotNull(latestOrder,
                 "A repair order should be found for Cristiano Ronaldo.");

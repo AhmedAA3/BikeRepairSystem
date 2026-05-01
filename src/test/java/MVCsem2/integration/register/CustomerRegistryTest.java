@@ -16,36 +16,36 @@ public class CustomerRegistryTest {
     }
 
     @Test
-    public void cristianoRonaldoShouldBeFoundByRegisteredPhoneNumber() {
+    public void registeredCustomerShouldBeFoundByRegisteredPhoneNumber() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        Customer cristiano = registry.findCustomer(cristianoPhone);
+        Customer registeredCustomer = registry.findCustomer(registeredCustomerPhone);
 
-        assertNotNull(cristiano,
+        assertNotNull(registeredCustomer,
                 "Cristiano Ronaldo should exist in the hardcoded customer registry.");
-        assertEquals("Cristiano Ronaldo", cristiano.getName(),
+        assertEquals("Cristiano Ronaldo", registeredCustomer.getName(),
                 "The registry should return Cristiano Ronaldo for this phone number.");
-        assertEquals("CR7@mail.com", cristiano.getEmail(),
+        assertEquals("CR7@mail.com", registeredCustomer.getEmail(),
                 "Cristiano Ronaldo's email should match the hardcoded customer data.");
-        assertEquals(cristianoPhone, cristiano.getPhoneNumber(),
+        assertEquals(registeredCustomerPhone, registeredCustomer.getPhoneNumber(),
                 "Cristiano Ronaldo's phone number should match the search value.");
     }
 
     @Test
-    public void cristianoRonaldoShouldHaveExpectedBikeInformation() {
+    public void registeredCustomerShouldHaveExpectedBikeInformation() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        Customer cristiano = registry.findCustomer(cristianoPhone);
+        Customer registeredCustomer = registry.findCustomer(registeredCustomerPhone);
 
-        assertNotNull(cristiano,
+        assertNotNull(registeredCustomer,
                 "Cristiano Ronaldo should be found before checking bike information.");
-        assertNotNull(cristiano.getBike(),
+        assertNotNull(registeredCustomer.getBike(),
                 "Cristiano Ronaldo should have a registered bike.");
-        assertEquals("Scotter", cristiano.getBike().getBrand(),
+        assertEquals("Scotter", registeredCustomer.getBike().getBrand(),
                 "The registered bike brand should match the hardcoded data.");
-        assertEquals("SET401", cristiano.getBike().getSerialNumber(),
+        assertEquals("SET401", registeredCustomer.getBike().getSerialNumber(),
                 "The registered bike serial number should match the hardcoded data.");
     }
 

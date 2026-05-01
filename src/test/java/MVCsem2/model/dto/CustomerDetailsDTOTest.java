@@ -9,16 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerDetailsDTOTest {
 
     @Test
-    public void cristianoRonaldoDetailsShouldBeCopiedToDTO() {
+    public void registeredCustomerDetailsShouldBeCopiedToDTO() {
         
         String customerName = "Cristiano Ronaldo";
         String customerEmail = "CR7@mail.com";
         String customerPhone = "0737654321";
 
         Bike registeredBike = new Bike("Scotter", " 1", "SET401");
-        Customer cristiano = new Customer(customerName, customerEmail, customerPhone, registeredBike);
+        Customer registeredCustomer = new Customer(customerName, customerEmail, customerPhone, registeredBike);
 
-        CustomerDetailsDTO customerDetails = new CustomerDetailsDTO(cristiano);
+        CustomerDetailsDTO customerDetails = new CustomerDetailsDTO(registeredCustomer);
 
         assertEquals(customerName, customerDetails.getName(),
                 "The DTO should contain Cristiano Ronaldo's name.");

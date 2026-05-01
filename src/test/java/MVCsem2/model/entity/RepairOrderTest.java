@@ -34,18 +34,6 @@ public class RepairOrderTest {
     }
 
     @Test
-    public void scenarioOrderShouldStoreOrderIdAndProblemDescription() {
-
-        String expectedOrderId = "RO4";
-        String expectedProblem = "Wheel is broken";
-
-        assertEquals(expectedOrderId, repairOrderInScenario.getRepairOrderId(),
-                "The repair order id should be RO4.");
-        assertEquals(expectedProblem, repairOrderInScenario.getProblemDescription(),
-                "The problem description should match the scenario.");
-    }
-
-    @Test
     public void addedDiagnosticResultsShouldRemainInCorrectOrder() {
 
         String damagedWheel = "Wheel is damaged";

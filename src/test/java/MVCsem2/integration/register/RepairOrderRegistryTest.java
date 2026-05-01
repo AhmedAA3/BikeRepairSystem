@@ -24,19 +24,19 @@ public class RepairOrderRegistryTest {
     }
 
     @Test
-    public void cristianoShouldHaveTheHardcodedRO2RepairOrder() {
+    public void registeredCustomerShouldHaveTheHardcodedRO2RepairOrder() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        RepairOrder cristianoOrder = registry.findRepairOrder(cristianoPhone);
+        RepairOrder registeredCustomerOrder = registry.findRepairOrder(registeredCustomerPhone);
 
-        assertNotNull(cristianoOrder,
+        assertNotNull(registeredCustomerOrder,
                 "Cristiano Ronaldo's hardcoded repair order should be found.");
-        assertEquals("RO2", cristianoOrder.getRepairOrderId(),
+        assertEquals("RO2", registeredCustomerOrder.getRepairOrderId(),
                 "The hardcoded repair order for Cristiano Ronaldo should be RO2.");
-        assertEquals("Brakes need adjustment", cristianoOrder.getProblemDescription(),
+        assertEquals("Brakes need adjustment", registeredCustomerOrder.getProblemDescription(),
                 "The hardcoded problem description for RO2 should be returned.");
-        assertEquals("BIKE200", cristianoOrder.getBikeSerialNo(),
+        assertEquals("BIKE200", registeredCustomerOrder.getBikeSerialNo(),
                 "The hardcoded bike serial number for RO2 should be returned.");
     }
 
@@ -73,10 +73,10 @@ public class RepairOrderRegistryTest {
     public void creatingViewScenarioOrderShouldStoreRO4() {
 
         String problem = "Wheel is broken";
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
         String bikeSerialNo = "RJL403";
 
-        registry.createRepairOrder(problem, cristianoPhone, bikeSerialNo);
+        registry.createRepairOrder(problem, registeredCustomerPhone, bikeSerialNo);
 
         RepairOrder createdOrder = registry.getRepairOrder("RO4");
 
@@ -86,7 +86,7 @@ public class RepairOrderRegistryTest {
                 "The created scenario repair order should get id RO4.");
         assertEquals(problem, createdOrder.getProblemDescription(),
                 "The created order should store the scenario problem description.");
-        assertEquals(cristianoPhone, createdOrder.getCustomerPhone(),
+        assertEquals(registeredCustomerPhone, createdOrder.getCustomerPhone(),
                 "The created order should store Cristiano Ronaldo's phone number.");
         assertEquals(bikeSerialNo, createdOrder.getBikeSerialNo(),
                 "The created order should store the bike serial number from the scenario.");
@@ -104,13 +104,13 @@ public class RepairOrderRegistryTest {
     }
 
     @Test
-    public void latestCristianoOrderShouldBeRO4AfterScenarioOrderIsCreated() {
+    public void latestRegisteredCustomerOrderShouldBeRO4AfterScenarioOrderIsCreated() {
 
-        String cristianoPhone = "0737654321";
+        String registeredCustomerPhone = "0737654321";
 
-        registry.createRepairOrder("Wheel is broken", cristianoPhone, "RJL403");
+        registry.createRepairOrder("Wheel is broken", registeredCustomerPhone, "RJL403");
 
-        RepairOrder latestOrder = registry.findRepairOrder(cristianoPhone);
+        RepairOrder latestOrder = registry.findRepairOrder(registeredCustomerPhone);
 
         assertNotNull(latestOrder,
                 "A repair order should be found for Cristiano Ronaldo.");
