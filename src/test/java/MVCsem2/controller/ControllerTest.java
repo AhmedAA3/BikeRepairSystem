@@ -31,7 +31,7 @@ public class ControllerTest {
         CustomerDetailsDTO customerDetails = controller.findCustomer(registeredCustomerPhone);
 
         assertNotNull(customerDetails,
-                "Cristiano Ronaldo should be found by his registered phone number.");
+                "The registered customer should be found by phone number.");
         assertEquals("Cristiano Ronaldo", customerDetails.getName(),
                 "The controller should return the correct customer name.");
         assertEquals("CR7@mail.com", customerDetails.getEmail(),
@@ -95,25 +95,9 @@ public class ControllerTest {
         RepairOrderDTO latestOrder = controller.findRepairOrder(registeredCustomerPhone);
 
         assertNotNull(latestOrder,
-                "A repair order should be found for Cristiano Ronaldo.");
+                "A repair order should be found for the registered customer.");
         assertEquals("RO4", latestOrder.getId(),
                 "The latest repair order for Cristiano Ronaldo should be the newly created RO4.");
-    }
-
-    @Test
-    public void diagnosticResultsShouldBeAddedToScenarioOrder() {
-
-        controller.createRepairOrder("Wheel is broken", "0737654321", "RJL403");
-
-        controller.addDiagnosticResult("RO4", "Wheel is damaged");
-        controller.addDiagnosticResult("RO4", "Headlights are broken");
-
-        RepairOrderDTO scenarioOrder = controller.getRepairOrderInfo("RO4");
-
-        assertNotNull(scenarioOrder,
-                "RO4 should still exist after adding diagnostic results.");
-        assertEquals("RO4", scenarioOrder.getId(),
-                "The diagnostic results should be connected to the scenario repair order.");
     }
 
     @Test

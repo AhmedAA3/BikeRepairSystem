@@ -23,9 +23,7 @@ public class View {
      */
     public void start() {
 
-		// 1: Customer details look up scenario
-		// Its been tested and works, prints out Cristiano Ronaldo customer details
-
+        // Customer lookup scenario
         String phoneNumber = "0737654321";
 
         CustomerDetailsDTO customerDetails = controller.findCustomer(phoneNumber);
@@ -35,119 +33,90 @@ public class View {
             System.out.println("Name: " + customerDetails.getName());
             System.out.println("Email: " + customerDetails.getEmail());
             System.out.println("Phone: " + customerDetails.getPhone());
-        } 
-		else 
-			{
-            	System.out.println("Customer not found.");
-        	}
-		
-		
-		
-		// 2: create repair order scenario
-		// Tested and works
+            System.out.println();
+        } else {
+            System.out.println("Customer not found.");
+            System.out.println();
+        }
 
-		String problemDescr = "Wheel is broken";
-		String customerPhone = phoneNumber;
-		String bikeSerialNo = "RJL403";
-		controller.createRepairOrder(problemDescr, customerPhone, bikeSerialNo);
+        // Create repair order scenario
+        String problemDescr = "Wheel is broken";
+        String customerPhone = phoneNumber;
+        String bikeSerialNo = "RJL403";
+        controller.createRepairOrder(problemDescr, customerPhone, bikeSerialNo);
 
+        // Find all repair orders scenario
+        RepairOrderDTO[] repairOrders = controller.findAllRepairOrders();
 
+        System.out.println("All repair orders:");
 
-		
-		// 3: find all repair orders scenario
-		// Tested and works
-		RepairOrderDTO[] repairOrders = controller.findAllRepairOrders();
+        for (int i = 0; i < repairOrders.length; i++) {
+            System.out.println("Repair order id: " + repairOrders[i].getId());
+            System.out.println("Status: " + repairOrders[i].getStatus());
+            System.out.println("Total cost: " + repairOrders[i].getTotalCost());
+            System.out.println();
+        }
 
-		System.out.println("All repair orders:");
+        // Find customer's repair order scenario
+        String phoneNumberForRepairOrder = phoneNumber;
 
-		for (int i = 0; i < repairOrders.length; i++) 
-		{
-    		System.out.println("Repair order id: " + repairOrders[i].getId());
-    		System.out.println("Status: " + repairOrders[i].getStatus());
- 			System.out.println("Total cost: " + repairOrders[i].getTotalCost());
-    		System.out.println();
-		}
+        RepairOrderDTO repairOrder = controller.findRepairOrder(phoneNumberForRepairOrder);
 
+        if (repairOrder != null) {
+            System.out.println("Repair order found before diagnostics and repair tasks:");
+            System.out.println("Repair order id: " + repairOrder.getId());
+            System.out.println("Status: " + repairOrder.getStatus());
+            System.out.println("Total cost: " + repairOrder.getTotalCost());
+            System.out.println();
+        } else {
+            System.out.println("No repair order found for phone number: " + phoneNumberForRepairOrder);
+            System.out.println();
+        }
 
-		// Find customesrs repair order
-		// Test works 
-		String phoneNumberForRepairOrder = phoneNumber;
+        // Add diagnostic results and repair tasks scenario
+        String repairOrderId = "RO4";
+        String[] diagnosticResults = {
+            "Wheel is damaged",
+            "Headlights are broken",
+        };
 
-		RepairOrderDTO repairOrder = controller.findRepairOrder(phoneNumberForRepairOrder);
+        for (int i = 0; i < diagnosticResults.length; i++) {
+            controller.addDiagnosticResult(repairOrderId, diagnosticResults[i]);
+        }
 
-		if (repairOrder != null) {
-			System.out.println("Repair order found before change:");
-			System.out.println("Repair order id: " + repairOrder.getId());
-			System.out.println("Status: " + repairOrder.getStatus());
-			System.out.println("Total cost: " + repairOrder.getTotalCost());
-		}	
-		else 
-		{
-			System.out.println("No repair order found for phone number: " + phoneNumberForRepairOrder);
-		}
-		
+        String[] repairTasks = {
+            "Replace wheel",
+            "Fix wiring",
+        };
 
+        int[] repairTaskCosts = {
+            999,
+            499,
+        };
 
+        for (int i = 0; i < repairTasks.length; i++) {
+            controller.addRepairTask(repairOrderId, repairTasks[i], repairTaskCosts[i]);
+        }
+        RepairOrderDTO updatedRepairOrder = controller.getRepairOrderInfo(repairOrderId);
 
-        
-		// Add diagnostic results and repair tasks loop scenario
+        if (updatedRepairOrder != null) {
+            System.out.println("Repair order after diagnostics and repair tasks:");
+            System.out.println("Repair order id: " + updatedRepairOrder.getId());
+            System.out.println("Status: " + updatedRepairOrder.getStatus());
+            System.out.println("Total cost: " + updatedRepairOrder.getTotalCost());
+            System.out.println();
+        } else {
+            System.out.println("Repair order not found: " + repairOrderId);
+            System.out.println();
+        }
+        // Accept or reject repair order scenario
+        String repairOrderIdToDecide = "RO4";
+        boolean repairOrderAccepted = true;
 
-		String repairOrderId = "RO4";
-
-		String[] diagnosticResults = 
-		{
-			"Wheel is damaged",
-			"Headlights are broken",
-		};
-
-		for (int i = 0; i < diagnosticResults.length; i++) 
-		{
-			controller.addDiagnosticResult(repairOrderId, diagnosticResults[i]);
-		}
-
-		String[] repairTasks = 
-		{
-			"Replace wheel",
-			"Fix wiring",
-		};
-
-		int[] repairTaskCosts = 
-		{
-			999,
-			499,
-		};
-
-		for (int i = 0; i < repairTasks.length; i++) 
-		{
-			controller.addRepairTask(repairOrderId, repairTasks[i], repairTaskCosts[i]);
-		}
-
-		RepairOrderDTO updatedRepairOrder = controller.getRepairOrderInfo(repairOrderId);
-
-		if (updatedRepairOrder != null) 
-		{
-    		System.out.println("Updated repair order:");
-    		System.out.println("Repair order id: " + updatedRepairOrder.getId());
-    		System.out.println("Status: " + updatedRepairOrder.getStatus());
-    		System.out.println("Sum cost: " + updatedRepairOrder.getTotalCost());
-		} 
-		else 
-		{
-    		System.out.println("Repair order not found: " + repairOrderId);
-		}
-
-		 
-		// accept or reject repair order scenario
-		String repairOrderIdToDecide = "RO4";
-		boolean repairOrderAccepted = true;
-
-		if (repairOrderAccepted) 
-		{
-			controller.acceptRepairOrder(repairOrderIdToDecide);
-		} 
-		else 
-		{
-			controller.rejectRepairOrder(repairOrderIdToDecide);
-		}
+        if (repairOrderAccepted) {
+            controller.acceptRepairOrder(repairOrderIdToDecide);
+        } else {
+            controller.rejectRepairOrder(repairOrderIdToDecide);
+        }
     }
 }

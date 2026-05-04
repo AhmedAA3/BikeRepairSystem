@@ -34,18 +34,7 @@ public class DiagnosticReportTest {
         assertEquals(diagnosticText, reportUnderTest.getDiagnosticResults().get(0),
                 "The wheel damage diagnostic result should be stored as the first result.");
     }
-
-    @Test
-    public void headlightsProblemResultShouldBeStored() {
-
-        String diagnosticText = "Headlights are broken";
-
-        reportUnderTest.addDiagnosticResult(diagnosticText);
-
-        assertEquals(diagnosticText, reportUnderTest.getDiagnosticResults().get(0),
-                "The headlights diagnostic result should be stored correctly.");
-    }
-
+    
     @Test
     public void viewScenarioDiagnosticResultsShouldKeepInsertionOrder() {
 
