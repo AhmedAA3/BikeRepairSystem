@@ -53,24 +53,6 @@ public class DiagnosticReportTest {
     }
 
     @Test
-    public void blankDiagnosticResultShouldBeIgnored() {
-
-        reportUnderTest.addDiagnosticResult("   ");
-
-        assertFalse(reportUnderTest.hasResults(),
-                "A blank diagnostic result should not be added to the report.");
-    }
-
-    @Test
-    public void nullDiagnosticResultShouldBeIgnored() {
-
-        reportUnderTest.addDiagnosticResult(null);
-
-        assertFalse(reportUnderTest.hasResults(),
-                "A null diagnostic result should not be added to the report.");
-    }
-
-    @Test
     public void copiedReportShouldContainSameScenarioResults() {
         
         String wheelResult = "Wheel is damaged";

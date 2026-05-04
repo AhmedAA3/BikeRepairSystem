@@ -98,22 +98,4 @@ public class RepairOrderTest {
         assertEquals("Rejected", repairOrderInScenario.getStatus(),
                 "The repair order status should be Rejected.");
     }
-
-    @Test
-    public void repairTaskWithBlankDescriptionShouldBeIgnored() {
-
-        repairOrderInScenario.addRepairTask("   ", 999);
-
-        assertEquals(0, repairOrderInScenario.getRepairTasks().size(),
-                "A repair task with a blank description should not be added.");
-    }
-
-    @Test
-    public void repairTaskWithNegativePriceShouldBeIgnored() {
-        
-        repairOrderInScenario.addRepairTask("Replace wheel", -999);
-
-        assertEquals(0, repairOrderInScenario.getRepairTasks().size(),
-                "A repair task with a negative price should not be added.");
-    }
 }

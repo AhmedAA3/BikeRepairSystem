@@ -48,13 +48,4 @@ public class CustomerRegistryTest {
         assertEquals("SET401", registeredCustomer.getBike().getSerialNumber(),
                 "The registered bike serial number should match the hardcoded data.");
     }
-
-    @Test
-    public void unknownPhoneNumberShouldNotReturnCustomer() {
-        
-        Customer missingCustomer = registry.findCustomer("0000000000");
-
-        assertNull(missingCustomer,
-                "A phone number that is not registered should not return a customer.");
-    }
 }

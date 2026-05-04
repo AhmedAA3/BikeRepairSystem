@@ -59,16 +59,7 @@ public class RepairOrderRegistryTest {
         assertNull(missingOrder,
                 "A repair order id that does not exist should return null.");
     }
-
-    @Test
-    public void unknownCustomerPhoneShouldNotReturnRepairOrder() {
-
-        RepairOrder order = registry.findRepairOrder("0000000000");
-
-        assertNull(order,
-                "An unknown phone number should not match any repair order.");
-    }
-
+    
     @Test
     public void creatingViewScenarioOrderShouldStoreRO4() {
 

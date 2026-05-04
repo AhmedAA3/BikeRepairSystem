@@ -97,7 +97,7 @@ public class ControllerTest {
         assertNotNull(latestOrder,
                 "A repair order should be found for the registered customer.");
         assertEquals("RO4", latestOrder.getId(),
-                "The latest repair order for Cristiano Ronaldo should be the newly created RO4.");
+                "The latest repair order for the registered customer should be the newly created RO4.");
     }
 
     @Test
